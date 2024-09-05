@@ -34,6 +34,21 @@ class Patient
         }
     }
 
+    public function updateReport($patient_id, $heart_rate, $blood_pressure, $respiratory_rate, $oxygen_saturation, $body_temperature, $glucose_level, $bmi, $cholesterol_level, $hemoglobin_level, $pain_scale)
+    {
+        $sql = "UPDATE report SET heart_rate = ? ,	blood_pressure = ?,	respiratory_rate = ?, oxygen_saturation = ?, body_temperature = ?, glucose_level = ?, bmi = ?, cholesterol_level = ?, hemoglobin_level = ?,	pain_scale = ? WHERE patient_id = ?";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ssssssssssi", $heart_rate, $blood_pressure, $respiratory_rate, $oxygen_saturation, $body_temperature, $glucose_level, $bmi, $cholesterol_level, $hemoglobin_level, $pain_scale, $patient_id);
+
+            if ($stmt->execute()) {
+                echo ("successfully updated.");
+            }
+        } catch (\Throwable $th) {
+            echo ($th);
+        }
+    }
+
     public function fetchReportbyId($patientId)
     {
         $sql = "SELECT * FROM report WHERE patient_id=?";
@@ -78,6 +93,23 @@ class Patient
 
     public function addFamilyMember($patient_id, $member_id)
     {
+        $sql = "SELECT * FROM user WHERE user_id=? and user_role='familymember'";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $member_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows == 0) {
+                echo ("The member ID does not exist in the user table.");
+                return;
+            }
+        } catch (\Throwable $th) {
+            echo ($th);
+            return;
+        }
+
         $sql = "SELECT * FROM familymember WHERE patient_id=? and member_id=?";
 
         try {

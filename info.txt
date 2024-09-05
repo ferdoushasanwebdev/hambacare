@@ -7,8 +7,6 @@
 
 
 
-admin->patient edit
-staff->patient edit
 looking for family member before adding
 alert
 validation
