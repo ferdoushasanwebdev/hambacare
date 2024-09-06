@@ -42,7 +42,7 @@ class Patient
             $stmt->bind_param("ssssssssssi", $heart_rate, $blood_pressure, $respiratory_rate, $oxygen_saturation, $body_temperature, $glucose_level, $bmi, $cholesterol_level, $hemoglobin_level, $pain_scale, $patient_id);
 
             if ($stmt->execute()) {
-                echo ("successfully updated.");
+                echo ("<div style='opacity: 1;' class='alert alert-success' role='alert'>successfully updated.</div>");
             }
         } catch (\Throwable $th) {
             echo ($th);
@@ -51,7 +51,7 @@ class Patient
 
     public function fetchReportbyId($patientId)
     {
-        $sql = "SELECT * FROM report WHERE patient_id=?";
+        $sql = "SELECT user_name, patient_id, heart_rate,	blood_pressure,	respiratory_rate, oxygen_saturation, body_temperature, glucose_level, bmi, cholesterol_level, hemoglobin_level,	pain_scale FROM user INNER JOIN report ON user.user_id = report.patient_id WHERE report.patient_id=?";
 
         try {
             $stmt = $this->conn->prepare($sql);
@@ -102,7 +102,7 @@ class Patient
             $result = $stmt->get_result();
 
             if ($result->num_rows == 0) {
-                echo ("The member ID does not exist in the user table.");
+                echo ("<div style='opacity: 1;' class='alert alert-danger' role='alert'>The member ID does not exist.</div>");
                 return;
             }
         } catch (\Throwable $th) {
@@ -119,7 +119,7 @@ class Patient
             $result = $stmt->get_result();
 
             if ($result->num_rows > 0) {
-                echo ("You have already added this member.");
+                echo ("<div style='opacity: 1;' class='alert alert-danger' role='alert'>You have already added this member.</div>");
             } else {
                 $sql = "INSERT INTO familymember (patient_id, member_id) VALUES (?, ?)";
 
@@ -128,12 +128,107 @@ class Patient
                     $stmt->bind_param("ii", $patient_id, $member_id);
 
                     if ($stmt->execute()) {
-                        echo ("Family Member Added.");
+                        echo ("<div style='opacity: 1;' class='alert alert-success' role='alert'>Successfully Family Member Added.</div>");
                     } else {
-                        echo ("Something weng wrong!");
+                        echo ("<div style='opacity: 1;' class='alert alert-danger' role='alert'>Something weng wrong!</div>");
                     }
                 } catch (\Throwable $th) {
                     echo ($th);
+                }
+            }
+        } catch (\Throwable $th) {
+            echo ($th);
+        }
+    }
+
+    public function displayAlerts($patient_id)
+    {
+        $sql = "SELECT * FROM report WHERE patient_id = ?";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $patient_id);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $report = $result->fetch_all(MYSQLI_ASSOC);
+                if ($report[0]["heart_rate"] < 60 || $report[0]["heart_rate"] > 100) {
+                    echo ("<div style='opacity: 1;' class='alert alert-danger text-capitalize' role='alert'>heart rate is abnormal!</div>");
+                }
+                if ($report[0]["blood_pressure"] < 90 || $report[0]["blood_pressure"] > 120) {
+                    echo ("<div style='opacity: 1;' class='alert alert-danger text-capitalize' role='alert'>blood pressure is abnormal!</div>");
+                }
+                if ($report[0]["respiratory_rate"] < 12 || $report[0]["respiratory_rate"] > 20) {
+                    echo ("<div style='opacity: 1;' class='alert alert-danger text-capitalize' role='alert'>Respiratory Rate is abnormal!</div>");
+                }
+                if ($report[0]["oxygen_saturation"] < 95 || $report[0]["oxygen_saturation"] > 100) {
+                    echo ("<div style='opacity: 1;' class='alert alert-danger text-capitalize' role='alert'>oxygen saturation is abnormal!</div>");
+                }
+                if ($report[0]["body_temperature"] < 97 || $report[0]["body_temperature"] > 99) {
+                    echo ("<div style='opacity: 1;' class='alert alert-danger text-capitalize' role='alert'>body temperature is abnormal!</div>");
+                }
+                if ($report[0]["glucose_level"] < 70 || $report[0]["glucose_level"] > 99) {
+                    echo ("<div style='opacity: 1;' class='alert alert-danger text-capitalize' role='alert'>glucose level is abnormal!</div>");
+                }
+                if ($report[0]["bmi"] < 18.5 || $report[0]["bmi"] > 25) {
+                    echo ("<div style='opacity: 1;' class='alert alert-danger text-capitalize' role='alert'>BMI is abnormal!</div>");
+                }
+                if ($report[0]["cholesterol_level"] >= 200) {
+                    echo ("<div style='opacity: 1;' class='alert alert-danger text-capitalize' role='alert'>cholesterol level is abnormal!</div>");
+                }
+                if ($report[0]["hemoglobin_level"] < 12 || $report[0]["hemoglobin_level"] > 16) {
+                    echo ("<div style='opacity: 1;' class='alert alert-danger text-capitalize' role='alert'>hemoglobin level is abnormal!</div>");
+                }
+                if ($report[0]["pain_scale"] > 0) {
+                    if ($report[0]["pain_scale"] <= 3 || $report[0]["pain_scale"] >= 1) {
+                        echo ("<div style='opacity: 1;' class='alert alert-danger text-capitalize' role='alert'>mid pain.</div>");
+                    } else if ($report[0]["pain_scale"] <= 6 || $report[0]["pain_scale"] >= 4) {
+                        echo ("<div style='opacity: 1;' class='alert alert-danger text-capitalize' role='alert'>moderate pain.</div>");
+                    } else if ($report[0]["pain_scale"] <= 10 || $report[0]["pain_scale"] >= 7) {
+                        echo ("<div style='opacity: 1;' class='alert alert-danger text-capitalize' role='alert'>severe pain.</div>");
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            echo ($th);
+        }
+    }
+
+    public function checkingAlert($patient_id)
+    {
+        $sql = "SELECT * FROM report WHERE patient_id = ?";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $patient_id);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $report = $result->fetch_all(MYSQLI_ASSOC);
+                if ($report[0]["heart_rate"] < 60 || $report[0]["heart_rate"] > 100) {
+                    return 1;
+                } else if ($report[0]["blood_pressure"] < 90 || $report[0]["blood_pressure"] > 120) {
+                    return 1;
+                } else if ($report[0]["respiratory_rate"] < 12 || $report[0]["respiratory_rate"] > 20) {
+                    return 1;
+                } else if ($report[0]["oxygen_saturation"] < 95 || $report[0]["oxygen_saturation"] > 100) {
+                    return 1;
+                } else if ($report[0]["body_temperature"] < 97 || $report[0]["body_temperature"] > 99) {
+                    return 1;
+                } else if ($report[0]["glucose_level"] < 70 || $report[0]["glucose_level"] > 99) {
+                    return 1;
+                } else if ($report[0]["bmi"] < 18.5 || $report[0]["bmi"] > 25) {
+                    return 1;
+                } else if ($report[0]["cholesterol_level"] >= 200) {
+                    return 1;
+                } else if ($report[0]["hemoglobin_level"] < 12 || $report[0]["hemoglobin_level"] > 16) {
+                    return 1;
+                } else if ($report[0]["pain_scale"] > 0) {
+                    return 1;
+                } else {
+                    return 0;
                 }
             }
         } catch (\Throwable $th) {

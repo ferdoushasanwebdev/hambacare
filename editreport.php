@@ -5,16 +5,17 @@ $patientObj = new Patient();
 
 $reports = $patientObj->fetchReportbyId($_GET['patient_id']);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $patientObj->updateReport($_GET['patient_id'], $_POST["heartRate"], $_POST["bloodPressure"], $_POST["respiratoryRate"], $_POST["oxygenSaturation"], $_POST["bodyTemperature"], $_POST["bloodGlucoseLevel"], $_POST["bmi"], $_POST["cholesterolLevels"], $_POST["hemoglobinLevels"], $_POST["painScale"]);
-    $reports = $patientObj->fetchReportbyId($_GET['patient_id']);
-}
+
 
 ?>
 
 <div class="container mt-5">
     <div class="report-form">
-        <h2 class="mb-4">Create Patient Test Report</h2>
+        <?php if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $patientObj->updateReport($_GET['patient_id'], $_POST["heartRate"], $_POST["bloodPressure"], $_POST["respiratoryRate"], $_POST["oxygenSaturation"], $_POST["bodyTemperature"], $_POST["bloodGlucoseLevel"], $_POST["bmi"], $_POST["cholesterolLevels"], $_POST["hemoglobinLevels"], $_POST["painScale"]);
+            $reports = $patientObj->fetchReportbyId($_GET['patient_id']);
+        } ?>
+        <h2 class="mb-4"><?php echo ($reports[0]['user_name']); ?>'s Test Report</h2>
         <form class="mb-3" method="post">
             <div class="form-group">
                 <label for="heartRate">Heart Rate</label>

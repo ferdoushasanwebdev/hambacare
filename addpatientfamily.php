@@ -1,15 +1,24 @@
 <?php include("./includes/header.php");
 include("./classes/class.patient.php");
+include("./classes/class.familymember.php");
 
 $obj = new Patient();
-
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $obj->addFamilyMember($_SESSION["user_id"], $_POST["id"]);
-}
+$familymemberObj = new FamilyMember();
 ?>
 
 <div class="container">
     <h1 class="my-3">Add <?php echo (($_SESSION['user_role'] == 'familymember') ? "Patient" : "Family Member") ?> Into The List</h1>
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        if ($_SESSION['user_role'] == "patient") {
+            $obj->addFamilyMember($_SESSION["user_id"], $_POST["id"]);
+        }
+
+        if ($_SESSION['user_role'] == "familymember") {
+            $familymemberObj->addPatient($_POST["id"], $_SESSION["user_id"]);
+        }
+    }
+    ?>
     <div class="row">
         <div class="col">
             <form method="post">

@@ -135,6 +135,8 @@ class User
 
                     if ($stmt->execute()) {
                         $_SESSION['message'] = "saved change.";
+                        $_SESSION['user_name'] = $username;
+                        $_SESSION['user_phone'] = $phone;
                     }
                 } else {
                     $_SESSION['message'] = "password not matched.";
@@ -147,6 +149,8 @@ class User
 
                 if ($stmt->execute()) {
                     $_SESSION['message'] = "saved change.";
+                    $_SESSION['user_name'] = $username;
+                    $_SESSION['user_phone'] = $phone;
                 }
             }
         } catch (\Throwable $th) {
