@@ -22,7 +22,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_name'])  && isset($_SES
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HambaCare</title>
+    <title>MediCare</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -36,9 +36,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_name'])  && isset($_SES
 <body>
 
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="./index.php">HambaCare</a>
+            <a class="navbar-brand" href="./index.php">MediCare</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

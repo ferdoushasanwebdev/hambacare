@@ -14,6 +14,26 @@ class Patient
 
     public function createReport($user_id, $heart_rate, $blood_pressure, $respiratory_rate, $oxygen_saturation, $body_temperature, $glucose_level, $bmi, $cholesterol_level, $hemoglobin_level, $pain_scale)
     {
+        if (
+            !is_int($heart_rate) ||
+            !is_int($blood_pressure) ||
+            !is_int($respiratory_rate) ||
+            !is_int($oxygen_saturation) ||
+            !is_int($glucose_level) ||
+            !is_int($pain_scale)
+        ) {
+            echo ("parameters are not integers.");
+            return;
+        }
+
+        if (
+            !is_numeric($body_temperature) || !is_numeric($bmi) ||
+            !is_numeric($cholesterol_level) || !is_numeric($hemoglobin_level)
+        ) {
+            echo ("parameters are invalid.");
+            return;
+        }
+
         $userObj = new User();
         $user = $userObj->fetchUserById($user_id);
 
@@ -36,6 +56,22 @@ class Patient
 
     public function updateReport($patient_id, $heart_rate, $blood_pressure, $respiratory_rate, $oxygen_saturation, $body_temperature, $glucose_level, $bmi, $cholesterol_level, $hemoglobin_level, $pain_scale)
     {
+        if (
+            !is_numeric($heart_rate) ||
+            !is_numeric($blood_pressure) ||
+            !is_numeric($respiratory_rate) ||
+            !is_numeric($oxygen_saturation) ||
+            !is_numeric($glucose_level) ||
+            !is_numeric($pain_scale) ||
+            !is_numeric($body_temperature) ||
+            !is_numeric($bmi) ||
+            !is_numeric($cholesterol_level) ||
+            !is_numeric($hemoglobin_level)
+        ) {
+            echo ("parameters are invalid.");
+            return;
+        }
+
         $sql = "UPDATE report SET heart_rate = ? ,	blood_pressure = ?,	respiratory_rate = ?, oxygen_saturation = ?, body_temperature = ?, glucose_level = ?, bmi = ?, cholesterol_level = ?, hemoglobin_level = ?,	pain_scale = ? WHERE patient_id = ?";
         try {
             $stmt = $this->conn->prepare($sql);

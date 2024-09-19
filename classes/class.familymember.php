@@ -1,5 +1,6 @@
 <?php
 include_once("./db/db.php");
+include_once("./classes/class.patient.php");
 
 class FamilyMember
 {
@@ -10,7 +11,6 @@ class FamilyMember
     {
         $db = new Database();
         $this->conn = $db->createConnection();
-
         $this->patientObj = new Patient();
     }
 

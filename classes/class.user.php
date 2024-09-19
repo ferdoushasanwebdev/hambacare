@@ -65,6 +65,11 @@ class User
 
     public function createUser($username, $phone, $password, $role)
     {
+        if (strlen($phone) < 11) {
+            echo ("Phone number must be at least 11 digits.");
+            return;
+        }
+
         $hashedpassword = password_hash($password, PASSWORD_BCRYPT);
         $sql = "INSERT INTO user (user_name, user_phone, user_password, user_role) VALUES (?, ?, ?, ?)";
 

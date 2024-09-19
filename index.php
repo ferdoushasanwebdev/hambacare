@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title text-center mb-4">Login</h3>
+                    <h3 id="formtitle" class="card-title text-center mb-4">Login</h3>
                     <form id="loginForm" method="post">
                         <input type="hidden" name="loginForm" value="login" />
                         <div class="form-group">

@@ -38,14 +38,18 @@ $familymember = $obj->fetchFamilyMember($_SESSION['user_id']);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($familymember as $user) { ?>
-                    <tr>
-                        <td><?php echo ($user['user_id']); ?></td>
-                        <td><?php echo ($user['user_name']); ?></td>
-                        <td><a href="./staffdetails.php?user_id=<?php echo ($user['user_id']) ?>" class="btn btn-primary">View</a></td>
-                        <td><a href="?remove=1&patient_id=<?php echo ($_SESSION['user_id']); ?>&member_id=<?php echo ($user['user_id']); ?>" class="btn btn-danger">Remove</a></td>
-                    </tr>
-                <?php } ?>
+                <?php
+                if (isset($familymember)) {
+                    foreach ($familymember as $user) {
+                ?>
+                        <tr>
+                            <td><?php echo ($user['user_id']); ?></td>
+                            <td><?php echo ($user['user_name']); ?></td>
+                            <td><a href="./staffdetails.php?user_id=<?php echo ($user['user_id']) ?>" class="btn btn-primary">View</a></td>
+                            <td><a href="?remove=1&patient_id=<?php echo ($_SESSION['user_id']); ?>&member_id=<?php echo ($user['user_id']); ?>" class="btn btn-danger">Remove</a></td>
+                        </tr>
+                <?php }
+                } ?>
             </tbody>
         </table>
     </div>
